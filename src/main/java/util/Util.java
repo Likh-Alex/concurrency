@@ -19,6 +19,6 @@ public class Util {
     }
 
     public int getCurrentSum() {
-        return list.stream().mapToInt(Integer::valueOf).sum();
+        return list.stream().reduce(0, Integer::sum);
     }
 }
