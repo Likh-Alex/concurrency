@@ -1,10 +1,10 @@
 package processing;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.ListUtils;
 import thread.CallableThread;
 
@@ -19,8 +19,9 @@ public class SumListWithCallable {
     public int getListSummary() {
         List<List<Integer>> partitions = ListUtils.partition(list,list.size() / THREAD_COUNT);
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
-        List<CallableThread> callableThreads = new ArrayList<>();
-        addPartitionsToThread(partitions, callableThreads);
+        List<CallableThread> callableThreads = partitions.stream()
+                .map(CallableThread::new)
+                .collect(Collectors.toList());
         try {
             executorService.invokeAll(callableThreads);
         } catch (InterruptedException e) {
@@ -29,13 +30,6 @@ public class SumListWithCallable {
         int summary = getThreadsResult(executorService, callableThreads);
         executorService.shutdown();
         return summary;
-    }
-
-    private void addPartitionsToThread(List<List<Integer>> partitions,
-                                       List<CallableThread> callableThreads) {
-        for (List<Integer> partition : partitions) {
-            callableThreads.add(new CallableThread(partition));
-        }
     }
 
     private int getThreadsResult(ExecutorService executorService,
