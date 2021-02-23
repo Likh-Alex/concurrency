@@ -10,7 +10,7 @@ public class CustomRunnableThread implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i <= 100; i++) {
+        while (counter.getCount() < 100) {
             logger.info("Runnable " + counter.increment());
         }
     }
