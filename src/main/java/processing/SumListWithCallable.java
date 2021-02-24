@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.ListUtils;
-import thread.CallableThread;
+import thread.SumCalculatorCallable;
 
 public class SumListWithCallable {
     private static final int THREAD_COUNT = 10;
@@ -19,23 +19,23 @@ public class SumListWithCallable {
     public int getListSummary() {
         List<List<Integer>> partitions = ListUtils.partition(list,list.size() / THREAD_COUNT);
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
-        List<CallableThread> callableThreads = partitions.stream()
-                .map(CallableThread::new)
+        List<SumCalculatorCallable> sumCalculatorCallables = partitions.stream()
+                .map(SumCalculatorCallable::new)
                 .collect(Collectors.toList());
         try {
-            executorService.invokeAll(callableThreads);
+            executorService.invokeAll(sumCalculatorCallables);
         } catch (InterruptedException e) {
             throw new RuntimeException("Can not invoke all threads: ", e);
         }
-        int summary = getThreadsResult(executorService, callableThreads);
+        int summary = getThreadsResult(executorService, sumCalculatorCallables);
         executorService.shutdown();
         return summary;
     }
 
     private int getThreadsResult(ExecutorService executorService,
-                                 List<CallableThread> callableThreads) {
+                                 List<SumCalculatorCallable> sumCalculatorCallables) {
         int summary = 0;
-        for (CallableThread thread: callableThreads) {
+        for (SumCalculatorCallable thread: sumCalculatorCallables) {
             try {
                 summary += executorService.submit(thread).get();
             } catch (InterruptedException | ExecutionException e) {

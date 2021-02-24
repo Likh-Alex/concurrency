@@ -3,10 +3,10 @@ package thread;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class CallableThread implements Callable<Integer> {
+public class SumCalculatorCallable implements Callable<Integer> {
     private List<Integer> list;
 
-    public CallableThread(List<Integer> list) {
+    public SumCalculatorCallable(List<Integer> list) {
         this.list = list;
     }
 

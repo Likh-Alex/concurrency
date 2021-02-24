@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ForkJoinTask;
 import org.apache.commons.collections4.ListUtils;
-import thread.RecursiveTaskThread;
+import thread.SumCalculatorRecursiveTask;
 
 public class SumListWithForkJoin {
     private static final int THREAD_COUNT = 10;
@@ -17,23 +17,24 @@ public class SumListWithForkJoin {
 
     public int getListSummary() {
         List<List<Integer>> partitions = ListUtils.partition(list, list.size() / THREAD_COUNT);
-        List<RecursiveTaskThread> recursiveThreads = addPartitions(partitions);
-        Collection<RecursiveTaskThread> invokedThreads = ForkJoinTask.invokeAll(recursiveThreads);
+        List<SumCalculatorRecursiveTask> recursiveThreads = addPartitions(partitions);
+        Collection<SumCalculatorRecursiveTask> invokedThreads = ForkJoinTask
+                .invokeAll(recursiveThreads);
         return getThreadsResult(invokedThreads);
     }
 
-    private int getThreadsResult(Collection<RecursiveTaskThread> invokedThreads) {
+    private int getThreadsResult(Collection<SumCalculatorRecursiveTask> invokedThreads) {
         int summary = 0;
-        for (RecursiveTaskThread task : invokedThreads) {
+        for (SumCalculatorRecursiveTask task : invokedThreads) {
             summary += task.join();
         }
         return summary;
     }
 
-    private List<RecursiveTaskThread> addPartitions(List<List<Integer>> partitions) {
-        List<RecursiveTaskThread> recursiveThreads = new ArrayList<>();
+    private List<SumCalculatorRecursiveTask> addPartitions(List<List<Integer>> partitions) {
+        List<SumCalculatorRecursiveTask> recursiveThreads = new ArrayList<>();
         for (List<Integer> partition : partitions) {
-            recursiveThreads.add(new RecursiveTaskThread(partition));
+            recursiveThreads.add(new SumCalculatorRecursiveTask(partition));
         }
         return recursiveThreads;
     }
