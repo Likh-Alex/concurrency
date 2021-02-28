@@ -1,10 +1,13 @@
-import org.apache.log4j.Logger;
+package thread;
 
-public class CustomExtendedThread extends Thread {
-    private static final Logger logger = Logger.getLogger(CustomExtendedThread.class);
+import org.apache.log4j.Logger;
+import util.Counter;
+
+public class ExtendedThread extends Thread {
+    private static final Logger logger = Logger.getLogger(ExtendedThread.class);
     private final Counter counter;
 
-    public CustomExtendedThread(Counter counter) {
+    public ExtendedThread(Counter counter) {
         this.counter = counter;
     }
 

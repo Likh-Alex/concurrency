@@ -1,10 +1,13 @@
-import org.apache.log4j.Logger;
+package thread;
 
-public class CustomRunnableThread implements Runnable {
-    private static final Logger logger = Logger.getLogger(CustomRunnableThread.class);
+import org.apache.log4j.Logger;
+import util.Counter;
+
+public class RunnableThread implements Runnable {
+    private static final Logger logger = Logger.getLogger(RunnableThread.class);
     private final Counter counter;
 
-    public CustomRunnableThread(Counter counter) {
+    public RunnableThread(Counter counter) {
         this.counter = counter;
     }
 
